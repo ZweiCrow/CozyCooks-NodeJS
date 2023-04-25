@@ -1,0 +1,10 @@
+
+
+1 - npm init
+2 - npm i express cors dotenv
+3 - Créer les dossiers : "config", "controller", "model", "routes"
+4 - Créer le fichier ".env" (fichier de configuration des connexions : port, base de données,etc.) puis le fichier "env.js" dans "config"
+5 - Créer les fichiers "app.js" et "serveur.js" à la racine
+6 - Ajouter '"type": "module",' dans le fichier "package.json"
+7 - Créer un fichier "°°°.controlleur.js" dans le dossier "controller"
+8 - Créer un fichier "°°°" correspondant dans le dossier "routes" pour chaque routes
