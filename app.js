@@ -1,12 +1,10 @@
 import express from "express";
+import fileUpload from "express-fileupload";
 import cors from "cors";
 
 // ROUTES
-import chefs from "./routes/chefs.js";
-import comments from "./routes/comments.js";
-import newsletter from "./routes/newsletter.js";
-import contacts from "./routes/contacts.js";
-import admins from "./routes/admins.js";
+import recettes from "./routes/recettes.js";
+import users from "./routes/users.js"
 
 // CONST
 const app = express();
@@ -14,12 +12,12 @@ const app = express();
 // MIDDLEWARES
 app.use(express.json());
 app.use(cors());
+app.use(express.static('public'));
+app.use('/images', express.static('images'));
+app.use(fileUpload());
 
 // PATH URL
-app.use("/chefs", chefs);
-app.use("/comments", comments);
-app.use("/newsletter", newsletter);
-app.use("/contacts", contacts);
-app.use("/admins", admins);
+app.use("/recettes", recettes)
+app.use("/users", users)
 
 export default app;
