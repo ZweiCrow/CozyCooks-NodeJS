@@ -1,8 +1,10 @@
-import mongoose from "mongoose";
+const { default: mongoose } = require("mongoose");
+const { response } = require("express");
+const fs = require("fs")
+const path = require("path")
 
 // MODEL
-
-export const Recette = mongoose.model("Recettes",{
+const Recette = mongoose.model("Recettes",{
   nom: String,
   auteur: String,
   niveau: String,
@@ -14,39 +16,58 @@ export const Recette = mongoose.model("Recettes",{
   display: String, // image pour la page de la recette
 })
 
-
 // FONCTIONS DE CE MODEL
 
 // GET
-export async function getRecettes(){
-  const recettes = await Recette.find({auteur: "admin"})
-  return recettes;
+const getRecettes = async (request, response, next) => {
+  try {
+    const recettes = await Recette.find({auteur: "admin"})
+    response.status(200).json(recettes)
+  } catch (error) {}
 }
 
-export async function getRecetteById(id){
-  const recettes = await Recette.findById(id)
-  return recettes;
+const getRecetteById = async (request, response, next) => {
+  try {
+    const id = request.params.id
+    const recette = await Recette.findById(id)
+    response.status(200).json(recette)
+  } catch (error) {}
 }
 
 // POST
-export async function addRecette(nom, auteur, niveau, style, categorie, temps, ingredients, etapes, display){
-  const recette = new Recette({
-    nom: nom,
-    auteur: auteur,
-    niveau: niveau,
-    style: style,
-    categorie: categorie,
-    temps: temps,
-    ingredients: ingredients,
-    etapes: etapes,
-    display: display
-  }) 
-  // console.log(recette);
-  
-  await recette.save()
+const addRecette = async (request, response, next) => {
+  try {
+    const recette = new Recette({
+      nom: request.body.nom,
+      auteur: request.body.auteur,
+      niveau: request.body.niveau,
+      style: request.body.style,
+      categorie: request.body.categorie,
+      temps: request.body.temps,
+      ingredients: request.body.ingredients,
+      etapes: request.body.etapes,
+      display: request.body.display
+    }) 
+    
+    await recette.save()
+  } catch (error) {}
 }
 
+
 // DELETE
-export async function supprRecetteById(id){
-  await Recette.deleteOne({_id: id})
+const supprRecetteById = async (request, response, next) => {
+  try {
+    const path = `./public/${request.params.img}`
+    const id = request.params.id
+    const deleted = await Recette.deleteOne({_id: id})
+    fs.unlink(path, (err) => {
+      if (err) {
+        console.error(err)
+        return
+      }
+      //file removed
+    })
+  } catch (error) {}
 }
+
+module.exports = { Recette, addRecette, getRecetteById, getRecettes, supprRecetteById }

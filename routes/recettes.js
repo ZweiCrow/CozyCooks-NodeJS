@@ -1,56 +1,23 @@
-import express, { response } from "express";
-import { addRecette, getRecetteById, getRecettes, supprRecetteById } from "../model/Recette.js";
-import fs from "fs"
-import path from 'path';
-import { fileURLToPath } from 'url';
+const express = require("express")
+const { response } = require("express")
+const fs = require("fs")
+const path = require("path")
+const { fileURLToPath } = require("url")
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
+const { addRecette, getRecetteById, getRecettes, supprRecetteById } = require("../model/Recette.js")
 const routeur = express.Router()
 
 // ROUTES
-routeur.get("/", async (request, response,next)=>{
-  try {
-    const list = await getRecettes()
-    response.status(200).json(list)
-  } catch (error) {
-    next(error)
-  }
-})
-routeur.get("/:id", async (request, response,next)=>{
-  try {
-    const recette = await getRecetteById(request.params.id)
-    response.status(200).json(recette)
-  } catch (error) {
-    next(error)
-  }
-})
+routeur.get("/", getRecettes)
 
-routeur.post("/add", (request, response, next)=>{
-  try {
-    addRecette(
-      request.body.nom,
-      request.body.auteur,
-      request.body.niveau,
-      request.body.style,
-      request.body.categorie,
-      request.body.temps,
-      request.body.ingredients,
-      request.body.etapes,
-      request.body.display
-    );
-    response.send("Send ! 🆗")
-  } catch (error) {
-    next(error)
-  }
-})
+routeur.get("/:id", getRecetteById)
+
+routeur.post("/add", addRecette)
 
 routeur.post("/upload", (request, response, next)=>{
   try {
     // Récuperer l'image
     const {image} = request.files
-
     
     const dt = new Date();
     const padL = (nr, len = 2, chr = `0`) => `${nr}`.padStart(2, chr);
@@ -69,21 +36,6 @@ routeur.post("/upload", (request, response, next)=>{
   }
 })
 
-routeur.delete("/delete/:id", (request, response, next) => {
-  const path = `./public/images/${request.params.id}.jpg`
-  try {
-    supprRecetteById(request.params.id)
-    fs.unlink(path, (err) => {
-      if (err) {
-        console.error(err)
-        return
-      }
-      //file removed
-    })
-    response.send("Deleted ! 🆗")
-  } catch (error) {
-    next(error)
-  }
-})
+routeur.delete("/delete/:img/:id", supprRecetteById)
 
-export default routeur;
+module.exports = routeur ;
