@@ -57,7 +57,7 @@ const addRecette = async (request, response, next) => {
 // DELETE
 const supprRecetteById = async (request, response, next) => {
   try {
-    const path = `./public/${request.params.img}`
+    const path = `./public/images/${request.params.img}`
     const id = request.params.id
     const deleted = await Recette.deleteOne({_id: id})
     fs.unlink(path, (err) => {
@@ -67,6 +67,7 @@ const supprRecetteById = async (request, response, next) => {
       }
       //file removed
     })
+    response.status(200).json(path)
   } catch (error) {}
 }
 
