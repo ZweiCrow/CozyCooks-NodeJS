@@ -53,6 +53,24 @@ const addRecette = async (request, response, next) => {
   } catch (error) {}
 }
 
+// PATCH
+const patchRecetteById = async (request, response, next) =>{
+  try {
+    const id = request.params.id
+    const recette = new Recette({
+      nom: request.body.nom,
+      auteur: request.body.auteur,
+      niveau: request.body.niveau,
+      style: request.body.style,
+      categorie: request.body.categorie,
+      temps: request.body.temps,
+      ingredients: request.body.ingredients,
+      etapes: request.body.etapes,
+      display: request.body.display
+    })
+    response.json(recette)
+  } catch (error) {}
+}
 
 // DELETE
 const supprRecetteById = async (request, response, next) => {
@@ -71,4 +89,4 @@ const supprRecetteById = async (request, response, next) => {
   } catch (error) {}
 }
 
-module.exports = { Recette, addRecette, getRecetteById, getRecettes, supprRecetteById }
+module.exports = { Recette, addRecette, getRecetteById, getRecettes, patchRecetteById, supprRecetteById }

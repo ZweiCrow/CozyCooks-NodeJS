@@ -11,6 +11,7 @@ const cors = require("cors")
 // import users from "./routes/users.js"
 const recettes = require("./routes/recettes.js")
 const users = require("./routes/users.js")
+const messages = require("./routes/messages.js")
 
 // CONST
 const app = express();
@@ -32,5 +33,6 @@ app.use(
 // PATH URL
 app.use("/recettes", recettes)
 app.use("/users", users)
+app.use("/messages", messages)
 
 // export default app;

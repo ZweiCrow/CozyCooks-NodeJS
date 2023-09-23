@@ -7,6 +7,7 @@ const app = express();
 
 const recettes = require("./routes/recettes.js")
 const users = require("./routes/users.js")
+const messages = require("./routes/messages.js")
 
 // PORT
 const PORT = process.env.PORT || 8000;
@@ -28,6 +29,7 @@ app.use(
 // PATH URL
 app.use("/recettes", recettes)
 app.use("/users", users)
+app.use("/messages", messages)
 
 const Connexion = async () => {
   await mongoose.connect(`mongodb+srv://${process.env.LOGIN}:${process.env.PASSWORD}@argon.e4u0pbq.mongodb.net/CozyCooks`)

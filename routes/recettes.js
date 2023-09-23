@@ -4,7 +4,7 @@ const fs = require("fs")
 const path = require("path")
 const { fileURLToPath } = require("url")
 
-const { addRecette, getRecetteById, getRecettes, supprRecetteById } = require("../model/Recette.js")
+const { addRecette, getRecetteById, getRecettes, patchRecetteById, supprRecetteById } = require("../model/Recette.js")
 const routeur = express.Router()
 
 // ROUTES
@@ -21,7 +21,7 @@ routeur.post("/upload", (request, response, next)=>{
     
     const dt = new Date();
     const padL = (nr, len = 2, chr = `0`) => `${nr}`.padStart(2, chr);
-    const date = `${padL(dt.getMonth()+1)}${padL(dt.getDate())}${dt.getFullYear()}${padL(dt.getHours())}${padL(dt.getMinutes())}`
+    const date = `${padL(dt.getMonth()+1)}${padL(dt.getDate())}${dt.getFullYear()}${padL(dt.getHours())}`
 
     // Changement du nom de l'image pour qu'il corresponde a celui de la recette
     image.name = date+image.name
@@ -35,6 +35,8 @@ routeur.post("/upload", (request, response, next)=>{
     next(error)
   }
 })
+
+routeur.patch("/patch/:id", patchRecetteById)
 
 routeur.delete("/delete/:img/:id", supprRecetteById)
 
