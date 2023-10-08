@@ -68,7 +68,8 @@ const patchRecetteById = async (request, response, next) =>{
       etapes: request.body.etapes,
       display: request.body.display
     })
-    response.json(recette)
+    console.log(recette);
+    // response.json(recette)
   } catch (error) {}
 }
 

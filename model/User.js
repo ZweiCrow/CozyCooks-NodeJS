@@ -81,10 +81,10 @@ const verifyUser = async (request, response, next) => {
       if(compare){
         return response.status(200).json({ message: user[0]._id })
       } else {
-        return response.status(500).json({ message: "Wrong password" })
+        return response.json({ message: "Wrong password" })
       }
     } else {
-      return response.status(500).json({ message: "No user found" })
+      return response.json({ message: "No user found" })
     }
   } catch (error) {}
 }
