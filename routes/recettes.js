@@ -21,7 +21,7 @@ routeur.post("/upload", (request, response, next)=>{
     
     const dt = new Date();
     const padL = (nr, len = 2, chr = `0`) => `${nr}`.padStart(2, chr);
-    const date = `${padL(dt.getMonth()+1)}${padL(dt.getDate())}${dt.getFullYear()}${padL(dt.getHours())}`
+    const date = `${padL(dt.getMonth()+1)}${padL(dt.getDate())}${dt.getFullYear()}${padL(dt.getHours())}${padL(dt.getMinutes())}`
 
     // Changement du nom de l'image pour qu'il corresponde a celui de la recette
     image.name = date+image.name

@@ -1,6 +1,7 @@
 const { default: mongoose } = require("mongoose");
 const bcrypt = require("bcrypt");
-const {Recette} = require("./Recette.js")
+const {Recette} = require("./Recette.js");
+const { request, response } = require("express");
 
 // MODEL
  const User = mongoose.model("Users",{
@@ -90,6 +91,28 @@ const verifyUser = async (request, response, next) => {
 }
 
 // PATCH
+const modifyUser = async (request, response, next) => {
+  try {
+    const id = request.params.id
+    let salt = await bcrypt.genSalt(10)
+    
+    const user = {
+      nom: request.body.nom,
+      email: request.body.email,
+      favorites: request.body.favorites,
+    }
+
+    if (request.body.password) {
+      let hash = await bcrypt.hash(request.body.password, salt)
+      user.password = hash;
+    }
+
+    const patchedUser = await User.findOneAndUpdate({_id: id}, user, {new: true})
+    console.log(user);
+    response.send(patchedUser)
+  } catch (error) {}
+}
+
 const addFavoriteToUser = async (request, response, next) => {
   try {
     const id = request.params.id
@@ -130,4 +153,13 @@ const removeFavoriteToUser = async (request, response, next) => {
   } catch (error) {}
 }
 
-module.exports = { User, addFavoriteToUser, addUser, getRecipesOfUser, getUserById, getUsers, removeFavoriteToUser, verifyUser }
+// DELETE
+const deleteUser = async (request, response, next) => {
+  try {
+    const id = request.params.id
+    const deleted = await User.deleteOne({_id: id})
+    response.send("Deleted ! 🆗")
+  } catch (error) {}
+}
+
+module.exports = { User, addFavoriteToUser, addUser, getRecipesOfUser, getUserById, modifyUser, getUsers, removeFavoriteToUser, verifyUser, deleteUser }
